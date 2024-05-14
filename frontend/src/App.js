@@ -38,11 +38,14 @@ function App() {
 
     try {
       const response = await axios.post('http://localhost:8000/v1/makeReservation', { roomType: selectedRoomType });
+      console.log(response,"respo");
       setMessage(response.data.message);
+      
       getAvailability();
       setSelectedRoomType("");
     } catch (error) {
-      setMessage('Error making reservation');
+      console.log(error,"errr")
+      setMessage(error.message);
     }
   };
 

@@ -48,7 +48,8 @@ describe("API testing ", ()=>{
 
 })
 
-const {getAllReservationFromDB, getAllResourcesFromDB} = require("../services/reservation.service")
+const {getAllReservationFromDB} = require("../services/reservation.service")
+const {getAllResourcesFromDB} = require("../services/Hospital.service")
 const service  = require("../services/reservation.service")
 const { getAllReservations,
   getAllResources,
