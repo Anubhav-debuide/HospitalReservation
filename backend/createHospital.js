@@ -1,4 +1,4 @@
-const { Hospital } = require('./models/hospital.model');
+const  Hospital = require('./models/hospital.model');
 
 async function createHospitalIfNotExists() {
   const hospital = await Hospital.findOne();

@@ -6,13 +6,6 @@
 
 describe("API testing ", ()=>{
 
-  // beforeEach(async()=>{
-  //   await mongoose.connect(process.env.MONGODB_URI)
-  // })
-
-  // afterEach(async()=>{
-  //   await mongoose.connection.close();
-  // })
   it("Read all the resources", async()=>{
     const data  = {
       normalRooms: 49,
@@ -26,7 +19,6 @@ describe("API testing ", ()=>{
       nonRebreatherMasks: 120,
     }
     const result = await request(app).get("/v1/getAllResources");
-    // console.log(result);
     expect(result.status).toBe(200);
     // expect(result.body.length).toBeGreaterThan(0)
     // expect(result.body).toBe(data);
@@ -56,7 +48,8 @@ describe("API testing ", ()=>{
 
 })
 
-const {getAllReservationFromDB, getAllResourcesFromDB} = require("../services/reservation.service")
+const {getAllReservationFromDB} = require("../services/reservation.service")
+const {getAllResourcesFromDB} = require("../services/Hospital.service")
 const service  = require("../services/reservation.service")
 const { getAllReservations,
   getAllResources,
@@ -124,60 +117,3 @@ describe("Controller tests", ()=>{
 
 })
 
-
-
-
-
-// Test code
-
-
-//   const mockReservations =[
-//     {
-//         "_id": "663c6fbda93b984780b58b85",
-//         "roomType": "Normal Room",
-//         "reservedAt": "2024-05-09T06:39:57.034Z",
-//         "__v": 0
-//     },
-//     {
-//         "_id": "663c6ffea93b984780b58b8e",
-//         "roomType": "ICU",
-//         "reservedAt": "2024-05-09T06:41:02.266Z",
-//         "__v": 0
-//     },
-//     {
-//         "_id": "663dba21fb3fae1e1be8b949",
-//         "roomType": "Oxygen Room",
-//         "reservedAt": "2024-05-10T06:09:37.550Z",
-//         "__v": 0
-//     },
-//     {
-//         "_id": "663dbf2c971547894146004c",
-//         "roomType": "Oxygen Room",
-//         "reservedAt": "2024-05-10T06:31:08.617Z",
-//         "__v": 0
-//     },
-//     {
-//         "_id": "663dbfa451ac758ae4052789",
-//         "roomType": "Oxygen Room",
-//         "reservedAt": "2024-05-10T06:33:08.601Z",
-//         "__v": 0
-//     }
-// ]
-
-
-  // const obj = {
-  //   "roomType":"ICU"
-  // }
-
-  // it("should return all the reservations", async () => {
-
-  //   const mockResponse = { json: jest.fn() };
-
-  //   const spyFunction = jest.spyOn(service, "getAllReservationFromDB").mockResolvedValue(mockReservations);
-  //   console.log(spyFunction,"spuFun");
-
-  //   const result = await getAllReservations(null, mockResponse);
-
-  //   expect(result.body).toEqual(mockReservations);
-  //   expect(mockResponse.json).toHaveBeenCalledWith(mockReservations);
-  // });
