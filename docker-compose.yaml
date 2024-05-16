@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+  frontend:
+    build: ./frontend
+    container_name: react-ui
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+    networks:
+      - hospital-network
+
+  backend:
+    build: ./backend
+    container_name: node-api
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - database
+    networks:
+      - hospital-network
+
+  database:
+    image: mongo
+    container_name: mongo-db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-backup:/data/db
+    networks:
+      - hospital-network
+
+volumes:
+  mongo-backup:
+    driver: local
+
+networks:
+  hospital-network:
+    driver: bridge

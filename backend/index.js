@@ -11,7 +11,7 @@ const mongoose = require("mongoose");
 const createHospitalIfNotExists = require("./createHospital")
 
 
-mongoose.connect(process.env.MONGODB_URI).then(()=> createHospitalIfNotExists(), console.log("Connected to DB")).catch((err)=>console.log(err))
+mongoose.connect("mongodb://mongo-db/").then(()=> createHospitalIfNotExists(), console.log("Connected to DB")).catch((err)=>console.log(err))
 
 
 const reservationRoutes = require("./routes/reservation.routes")
