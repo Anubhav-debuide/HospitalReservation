@@ -1,4 +1,3 @@
-// const { Hospital, Reservation } = require('../models/hospital.model');
 const Hospital = require("../models/hospital.model");
 const Reservation = require("../models/Reservation.model")
 
@@ -31,10 +30,8 @@ async function makeReservation(req, res) {
   const roomType = req.body.roomType;
   try {
     const message = await makeReservationService(roomType);
-    // console.log(message, "mess")
     return res.json({ message });
   } catch (error) {
-    // console.log(error);
     return res.status(400).json({ message: error.message });
   }
 }
