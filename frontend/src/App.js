@@ -8,7 +8,7 @@ function App() {
 
   const getAvailability = async()=>{
     try{
-      const availability = await axios.get('http://node-api:8000/v1/getAvailableRooms');
+      const availability = await axios.get('http://localhost:8000/v1/getAvailableRooms');
       console.log(availability.data);  
       console.log(availableRooms,"available rooms")
       setAvailableRooms(availability.data);
@@ -37,7 +37,7 @@ function App() {
     }
 
     try {
-      const response = await axios.post('http://node-api:8000/v1/makeReservation', { roomType: selectedRoomType });
+      const response = await axios.post('http://localhost:8000/v1/makeReservation', { roomType: selectedRoomType });
       console.log(response,"respo");
       setMessage(response.data.message);
       
