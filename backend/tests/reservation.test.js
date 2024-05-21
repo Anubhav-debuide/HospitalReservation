@@ -20,14 +20,13 @@ describe("API testing ", ()=>{
     }
     const result = await request(app).get("/v1/getAllResources");
     expect(result.status).toBe(200);
-    // expect(result.body.length).toBeGreaterThan(0)
-    // expect(result.body).toBe(data);
+    expect(result.body.length).toBeGreaterThan(0)
+    expect(result.body).toBe(data);
   })
 
   it("Get all reservations", async()=>{
     const result = await request(app).get("/v1/getAllReservations");
     expect(result.status).toEqual(200);
-    // expect(result.body).toBe(Array);
     expect(result.body).toEqual(expect.any(Array));
   })
 
@@ -36,8 +35,7 @@ describe("API testing ", ()=>{
       "roomType":"Oxygen Room"
   });
     expect(result.status).toEqual(200);
-    // expect(result.body).toBe(Array);
-    // expect(result.body).toEqual(expect.any(Array));
+    expect(result.body).toEqual(expect.any(Array));
   })
 
   it("Shows error message if invalid data is passed in the post request", async()=>{
@@ -80,7 +78,6 @@ describe("Controller tests", ()=>{
       json: jest.fn(),
     };
     const result =  await getAllReservations(req, res);
-    console.log(result, "result")
     expect(res.json).toHaveBeenCalledTimes(1);
   });
 
@@ -106,7 +103,6 @@ describe("Controller tests", ()=>{
 
   it("should get available rooms", async () => {
     const req = { };
-    // const res = { json: jest.fn() };
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),

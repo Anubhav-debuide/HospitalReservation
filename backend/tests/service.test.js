@@ -60,34 +60,5 @@ describe("Service Layer Tests", ()=>{
     })
 
 
-
-    // it("Should make a reservation if resources are available",async()=>{
-
-    //     const mockHospital = {
-    //         "normalRooms": 1,
-    //         // "oxygenRooms": 50,
-    //         // "icuRooms": 19,
-    //         "flatBeds": 1,
-    //         // "reclinerBeds": 99,
-    //         // "ventilators": 15,
-    //         // "oxygenCylinders": 109,
-    //         "normalMasks": 2,
-    //         // "nonRebreatherMasks": 120,
-    //     }
-
-    //     // const updatedResources = {
-
-    //     // }
-    //     // jest.spyOn(makeReservation, "getAllResourcesFromDB").mockResolvedValue(Promise.resolve(mockHospital));
-    //     const getAllResourcesFromDB = jest.fn(()=>{return mockHospital})
-    //     jest.spyOn(Hospital , "findByIdAndUpdate").mockResolvedValue(Promise.resolve(mockHospital))
-
-    //     const message = await makeReservationService("Normal Room");
-    //     console.log(message,"msg")
-
-    //     expect(message).toBe("Reservation made for Normal Room")
-
-    // })
-
     
 })
