@@ -1,16 +1,15 @@
 const Reservation = require("../models/Reservation.model")
-const Hospital = require("../models/hospital.model");
+const hospitalService = require("../services/Hospital.service");
 
-const {getAllResourcesFromDB}  = require("../services/Hospital.service")
-
-const getAllReservationFromDB = async()=>{
+class ReservationService{
+  async getAllReservationFromDB (){
     const reservations = await Reservation.find();
     return reservations;
-}
+  }
 
-async function makeReservationService(roomType) {
-    console.log(roomType,"roomTypr")
-    const hospital = await getAllResourcesFromDB();
+
+  async makeReservationService(roomType) {
+    const hospital = await hospitalService.getAllResourcesFromDB();
     if (!hospital) {
       throw new Error('Hospital not found');
     }
@@ -19,28 +18,22 @@ async function makeReservationService(roomType) {
     switch (roomType) {
       case 'Normal Room':
         if (hospital.normalRooms > 0 && hospital.flatBeds >= 1 && hospital.normalMasks >= 2) {
-          updatedHospital = await Hospital.findByIdAndUpdate(hospital._id, {
-            $inc: { normalRooms: -1, flatBeds: -1, normalMasks: -2 }
-          }, { new: true });
-          console.log(updatedHospital,"updated")
+          updatedHospital = { $inc: { normalRooms: -1, flatBeds: -1, normalMasks: -2 }}
         } else {
           return ('Not enough resources for Normal Room');
         }
         break;
       case 'Oxygen Room':
         if (hospital.oxygenRooms > 0 && hospital.oxygenCylinders>1 &&hospital.reclinerBeds>0 && hospital.nonRebreatherMasks>1) {
-          updatedHospital = await Hospital.findByIdAndUpdate(hospital._id, {
-            $inc: { oxygenRooms: -1, oxygenCylinders: -2, reclinerBeds: -1, nonRebreatherMasks: -2 }
-          }, { new: true });
+          updatedHospital = {$inc: { oxygenRooms: -1, oxygenCylinders: -2, reclinerBeds: -1, nonRebreatherMasks: -2 }}
+
         } else {
           return ('Not enough resources for Oxygen Room');
         }
         break;
       case 'ICU':
         if (hospital.icuRooms > 0 && hospital.ventilators>0 && hospital.oxygenCylinders>0 && hospital.reclinerBeds>0) {
-          updatedHospital = await Hospital.findByIdAndUpdate(hospital._id, {
-            $inc: { icuRooms: -1, ventilators: -1, oxygenCylinders: -1, reclinerBeds: -1 }
-          }, { new: true });
+          updatedHospital = {$inc: { icuRooms: -1, ventilators: -1, oxygenCylinders: -1, reclinerBeds: -1 }}
         } else {
           return ('Not enough resources for ICU');
         }
@@ -48,17 +41,16 @@ async function makeReservationService(roomType) {
       default:
         throw new Error('Invalid room type');
     }
-  
+
+
+    await hospitalService.upDateResources(hospital._id, updatedHospital);
     const reservation = new Reservation({ roomType });
     await reservation.save();
-
-    // const reservation = Reservation.create({roomType})
-  
     return `Reservation made for ${roomType}`;
   }
   
 
-module.exports = {
-    getAllReservationFromDB,
-    makeReservationService 
 }
+
+
+module.exports = new ReservationService();
