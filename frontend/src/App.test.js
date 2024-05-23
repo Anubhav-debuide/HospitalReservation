@@ -1,4 +1,5 @@
-import { render, screen ,waitFor, fireEvent, act} from '@testing-library/react';
+import { render, screen ,waitFor, fireEvent} from '@testing-library/react';
+import {act} from "react"
 import App from './App';
 import axios from "axios"
 
@@ -11,34 +12,52 @@ describe("Hospital Reservations Tests", ()=>{
   });
 
 
-test('renders component with initial state', () => {
+test('renders component with initial state', async() => {
+
   render(<App />);
+ 
 
+await waitFor(()=>{
   expect(screen.getByText('Hospital Reservation System')).toBeInTheDocument();
+})
+  
 
-  expect(screen.getByDisplayValue('Select Room Type')).toBeInTheDocument();
+   expect(screen.getByDisplayValue('Select Room Type')).toBeInTheDocument();
 
-  // expect(screen.getByText('Reserve')).toBeInTheDocument();
+   expect(screen.getByText('Reserve')).toBeInTheDocument();
+
+
 });
 
-test("Check if a button exists with text Reserve", ()=>{
+test("Check if a button exists with text Reserve", async()=>{
     render(<App/>)
 
     let reserveButton  = screen.getByRole("button", { name: "Reserve" });
-    expect(reserveButton).toBeInTheDocument();
+    await waitFor(()=>{
+      expect(reserveButton).toBeInTheDocument();
+    })
+    
 })
 
 
-test('renders select tag with three options', () => {
-  render(<App />);
+test('renders select tag with three options', async() => {
+
+    render(<App />);
+
+  
 
   const selectElement = screen.getByRole('combobox'); 
   expect(selectElement).toBeInTheDocument(); 
 
-  const options = screen.getAllByRole('option'); 
-  expect(options).toHaveLength(4); 
-
-  expect(screen.getByText('Select Room Type')).toBeInTheDocument();
+  act(()=>{
+    const options = screen.getAllByRole('option'); 
+    expect(options).toHaveLength(4); 
+  })
+ 
+  await waitFor(()=>{
+    expect(screen.getByText('Select Room Type')).toBeInTheDocument();
+  })
+  
   expect(screen.getByText('Normal Room')).toBeInTheDocument();
   expect(screen.getByText('Oxygen Room')).toBeInTheDocument();
   expect(screen.getByText('ICU')).toBeInTheDocument();
@@ -50,8 +69,10 @@ test('makes reservation when room type is selected', async () => {
   axios.post.mockResolvedValueOnce(mockResponse);
 
   render(<App />);
-  fireEvent.change(screen.getByRole('combobox'), { target: { value: 'Normal Room' } });
-  fireEvent.click(screen.getByText('Reserve'));
+  await act(async()=>{
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'Normal Room' } });
+    fireEvent.click(screen.getByText('Reserve'));
+  })
 
   await waitFor(() => {
     expect(axios.post).toHaveBeenCalledWith('http://localhost:8000/v1/makeReservation', { roomType: 'Normal Room' });
@@ -71,11 +92,9 @@ test('Fetches available rooms on mount', async () => {
 }
 jest.spyOn(axios, 'get').mockResolvedValueOnce({ data: mockData });
 
-  // act(()=>{
+  act(()=>{
     render(<App />);
-    console.log(await screen.getByRole('combobox').innerHTML, "innerhtml");
-    // screen.debug();w
-  // })
+  })
 
   await waitFor(() => {
     expect(axios.get).toHaveBeenCalledTimes(1);

@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from 'react';
+import React, { useState , useEffect, useMemo} from 'react';
 import axios from 'axios';
 
 function App() {
@@ -6,29 +6,23 @@ function App() {
   const [message, setMessage] = useState('');
   const [availableRooms, setAvailableRooms] = useState({});
 
-  const getAvailability = async()=>{
-    try{
-      const availability = await axios.get('http://localhost:8000/v1/getAvailableRooms');
-      console.log(availability.data);  
-      console.log(availableRooms,"available rooms")
-      setAvailableRooms(availability.data);
-    }catch(err)
-    {
-      console.log("Error in getting the data");
-      setAvailableRooms({})
+  const getAvailability = useMemo(() => async () => {
+    try {
+        const availability = await axios.get('http://localhost:8000/v1/getAvailableRooms');
+        setAvailableRooms(availability.data);
+    } catch (err) {
+        setAvailableRooms({});
     }
-    
-  }
+}, []);
+
 
   useEffect(()=>{
-
-    // eslint-disable-next-line no-unused-vars
+    
     const fetchData = async()=>{
       await getAvailability();
     }
     fetchData();
-    // getAvailability();
-  },[])
+  },[getAvailability])
 
   const makeReservation = async () => {
     if (!selectedRoomType) {
@@ -39,10 +33,11 @@ function App() {
     try {
       const response = await axios.post('http://localhost:8000/v1/makeReservation', { roomType: selectedRoomType });
       setMessage(response.data.message);
+      
       getAvailability();
       setSelectedRoomType("");
     } catch (error) {
-      setMessage('Error making reservation');
+      setMessage(error.message);
     }
   };
 
