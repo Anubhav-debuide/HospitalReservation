@@ -6,27 +6,11 @@ function App() {
   const [message, setMessage] = useState('');
   const [availableRooms, setAvailableRooms] = useState({});
 
-  // const getAvailability = async()=>{
-  //   try{
-  //     const availability = await axios.get('http://localhost:8000/v1/getAvailableRooms');
-  //     console.log(availability.data);  
-  //     console.log(availableRooms,"available rooms")
-  //     setAvailableRooms(availability.data);
-  //   }catch(err)
-  //   {
-  //     console.log("Error in getting the data");
-  //     setAvailableRooms({})
-  //   }
-    
-  // }
-
   const getAvailability = useMemo(() => async () => {
     try {
         const availability = await axios.get('http://localhost:8000/v1/getAvailableRooms');
-        console.log(availability.data);
         setAvailableRooms(availability.data);
     } catch (err) {
-        console.log("Error in getting the data");
         setAvailableRooms({});
     }
 }, []);
@@ -48,13 +32,11 @@ function App() {
 
     try {
       const response = await axios.post('http://localhost:8000/v1/makeReservation', { roomType: selectedRoomType });
-      console.log(response,"respo");
       setMessage(response.data.message);
       
       getAvailability();
       setSelectedRoomType("");
     } catch (error) {
-      console.log(error,"errr")
       setMessage(error.message);
     }
   };
