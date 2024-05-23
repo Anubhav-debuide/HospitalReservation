@@ -23,6 +23,7 @@ function App() {
   const getAvailability = useMemo(() => async () => {
     try {
         const availability = await axios.get('http://localhost:8000/v1/getAvailableRooms');
+        console.log(availability.data);
         setAvailableRooms(availability.data);
     } catch (err) {
         console.log("Error in getting the data");
